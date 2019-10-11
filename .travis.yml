@@ -1,5 +1,9 @@
 language: java
 jdk:
   - openjdk8
-script:
-  - ./gradlew clean build publish
+jobs:
+  include:
+    - stage: build
+      script: ./gradlew build
+    - stage: publish to github packages
+      script: ./gradlew publish
