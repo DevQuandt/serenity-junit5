@@ -3,7 +3,5 @@ jdk:
   - openjdk8
 jobs:
   include:
-    - stage: build
-      script: ./gradlew build
-    - stage: publish to github packages
-      script: ./gradlew publish -DARTEFACT_VERSION=0.1.$TRAVIS_BUILD_NUMBER
+    - stage: build and publish to github packages
+      script: ./gradlew build publish
