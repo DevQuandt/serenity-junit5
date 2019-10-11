@@ -25,11 +25,13 @@ public final class TestMethodAnnotations {
         return (method.getAnnotation(WithDriver.class) != null);
     }
 
+    @SuppressWarnings("checkstyle:SimplifyBooleanExpression")
     public String specifiedDriver() {
         Preconditions.checkArgument(isDriverSpecified() == true);
         return (method.getAnnotation(WithDriver.class).value());
     }
 
+    @SuppressWarnings("checkstyle:SimplifyBooleanExpression")
     public String driverOptions() {
         Preconditions.checkArgument(isDriverSpecified() == true);
         return Optional.ofNullable(method.getAnnotation(DriverOptions.class)).map(DriverOptions::value).orElse("");

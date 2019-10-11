@@ -1,5 +1,10 @@
 package net.serenitybdd.junit5.counter;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.logging.LoggingLevel;
@@ -11,10 +16,6 @@ import net.thucydides.core.steps.ExecutedStepDescription;
 import net.thucydides.core.steps.StepFailure;
 import net.thucydides.core.steps.StepListener;
 import net.thucydides.core.util.EnvironmentVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 public class TestCountListener implements StepListener {
 
@@ -22,17 +23,20 @@ public class TestCountListener implements StepListener {
     private final EnvironmentVariables environmentVariables;
     private final TestCount testCount;
 
-    protected TestCountListener(EnvironmentVariables environmentVariables, Logger logger, TestCount testCount) {
+    protected TestCountListener(
+            final EnvironmentVariables environmentVariables,
+            final Logger logger,
+            final TestCount testCount) {
         this.logger = logger;
         this.environmentVariables = environmentVariables;
         this.testCount = testCount;
     }
 
-    public TestCountListener(EnvironmentVariables environmentVariables, TestCount testCount) {
+    public TestCountListener(final EnvironmentVariables environmentVariables, final TestCount testCount) {
         this(environmentVariables, LoggerFactory.getLogger(Serenity.class), testCount);
     }
 
-    private boolean loggingLevelIsAtLeast(LoggingLevel minimumLoggingLevel) {
+    private boolean loggingLevelIsAtLeast(final LoggingLevel minimumLoggingLevel) {
         return (getLoggingLevel().compareTo(minimumLoggingLevel) >= 0);
     }
 
@@ -41,58 +45,50 @@ public class TestCountListener implements StepListener {
     }
 
     private LoggingLevel getLoggingLevel() {
-        String logLevel = ThucydidesSystemProperty.THUCYDIDES_LOGGING.from(environmentVariables, LoggingLevel.NORMAL.name());
+        final String logLevel = ThucydidesSystemProperty.THUCYDIDES_LOGGING
+                .from(environmentVariables, LoggingLevel.NORMAL.name());
 
         return LoggingLevel.valueOf(logLevel);
     }
 
-
-    public void testSuiteStarted(Class<?> storyClass) {
+    public void testSuiteStarted(final Class<?> storyClass) {
     }
 
-
-    public void testSuiteStarted(Story storyOrFeature) {
+    public void testSuiteStarted(final Story storyOrFeature) {
     }
-
 
     public void testSuiteFinished() {
     }
 
-
-    public void testStarted(String description) {
-        int currentTestCount = testCount.getNextTest();
+    public void testStarted(final String description) {
+        final int currentTestCount = testCount.getNextTest();
         if (loggingLevelIsAtLeast(LoggingLevel.NORMAL)) {
             getLogger().info("TEST NUMBER: {}", currentTestCount);
         }
     }
 
     @Override
-    public void testStarted(String description, String id) {
+    public void testStarted(final String description, final String id) {
         testStarted(description);
     }
 
-
-    public void testFinished(TestOutcome result) {
+    public void testFinished(final TestOutcome result) {
     }
 
     public void testRetried() {
     }
 
-    public void stepStarted(ExecutedStepDescription description) {
+    public void stepStarted(final ExecutedStepDescription description) {
     }
 
-
-    public void skippedStepStarted(ExecutedStepDescription description) {
+    public void skippedStepStarted(final ExecutedStepDescription description) {
     }
 
-
-    public void stepFailed(StepFailure failure) {
+    public void stepFailed(final StepFailure failure) {
     }
 
-
-    public void lastStepFailed(StepFailure failure) {
+    public void lastStepFailed(final StepFailure failure) {
     }
-
 
     public void stepIgnored() {
     }
@@ -100,18 +96,14 @@ public class TestCountListener implements StepListener {
     public void stepPending() {
     }
 
-
-    public void stepPending(String message) {
+    public void stepPending(final String message) {
     }
-
 
     public void stepFinished() {
     }
 
-
-    public void testFailed(TestOutcome testOutcome, Throwable cause) {
+    public void testFailed(final TestOutcome testOutcome, final Throwable cause) {
     }
-
 
     public void testIgnored() {
     }
@@ -131,26 +123,25 @@ public class TestCountListener implements StepListener {
 
     }
 
-
     public void notifyScreenChange() {
     }
 
-    public void useExamplesFrom(DataTable table) {
+    public void useExamplesFrom(final DataTable table) {
     }
 
     @Override
-    public void addNewExamplesFrom(DataTable table) {
+    public void addNewExamplesFrom(final DataTable table) {
 
     }
 
-    public void exampleStarted(Map<String, String> data) {
+    public void exampleStarted(final Map<String, String> data) {
     }
 
     public void exampleFinished() {
     }
 
     @Override
-    public void assumptionViolated(String message) {
+    public void assumptionViolated(final String message) {
     }
 
     @Override

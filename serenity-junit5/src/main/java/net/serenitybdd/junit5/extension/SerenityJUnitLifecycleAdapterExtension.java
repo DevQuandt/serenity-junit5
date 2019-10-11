@@ -1,7 +1,7 @@
 package net.serenitybdd.junit5.extension;
 
-import net.thucydides.core.annotations.Pending;
-import net.thucydides.core.steps.StepEventBus;
+import java.util.Optional;
+
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -9,13 +9,15 @@ import org.junit.jupiter.api.extension.LifecycleMethodExecutionExceptionHandler;
 import org.junit.jupiter.api.extension.TestWatcher;
 import org.opentest4j.TestAbortedException;
 
-import java.util.Optional;
+import net.thucydides.core.annotations.Pending;
+import net.thucydides.core.steps.StepEventBus;
 
 import static net.thucydides.core.steps.StepEventBus.getEventBus;
 import static net.thucydides.core.steps.TestSourceType.TEST_SOURCE_JUNIT;
 
 // Junit4: net.thucydides.junit.listeners.JUnitStepListener
-public class SerenityJUnitLifecycleAdapterExtension implements BeforeEachCallback, AfterAllCallback, TestWatcher, LifecycleMethodExecutionExceptionHandler {
+public class SerenityJUnitLifecycleAdapterExtension
+        implements BeforeEachCallback, AfterAllCallback, TestWatcher, LifecycleMethodExecutionExceptionHandler {
 
     @Override
     public void beforeEach(final ExtensionContext extensionContext) {
@@ -31,15 +33,17 @@ public class SerenityJUnitLifecycleAdapterExtension implements BeforeEachCallbac
     }
 
     @Override
-    // net.thucydides.junit.listeners.JUnitStepListener.notifyTestFinished => Junit4: Called when an atomic test has finished, whether the test succeeds or fails.
-    // not using AfterTestExecutionCallback.afterTestExecution as it is called before org.junit.jupiter.api.extension.TestWatcher.testFailed or org.junit.jupiter.api.extension.TestWatcher.testAborted
+    // net.thucydides.junit.listeners.JUnitStepListener.notifyTestFinished => Junit4: Called when an atomic test has finished,
+    // whether the test succeeds or fails.
+    // not using AfterTestExecutionCallback.afterTestExecution as it is called before
+    // org.junit.jupiter.api.extension.TestWatcher.testFailed or org.junit.jupiter.api.extension.TestWatcher.testAborted
     public void testSuccessful(final ExtensionContext extensionContext) {
         notifyTestFinished();
     }
 
     @Override
     // Junit4: net.serenitybdd.junit.runners.SerenityRunner.processTestMethodAnnotationsFor
-    public void testDisabled(ExtensionContext extensionContext, Optional<String> reason) {
+    public void testDisabled(final ExtensionContext extensionContext, final Optional<String> reason) {
         beforeEach(extensionContext);
         getEventBus().testIgnored();
         notifyTestFinished();
@@ -62,12 +66,14 @@ public class SerenityJUnitLifecycleAdapterExtension implements BeforeEachCallbac
     }
 
     @Override
-    public void handleBeforeAllMethodExecutionException(final ExtensionContext extensionContext, final Throwable throwable) throws Throwable {
+    public void handleBeforeAllMethodExecutionException(final ExtensionContext extensionContext, final Throwable throwable)
+            throws Throwable {
         handleTestClassLevelLifecycleFailure(extensionContext, throwable, "Initialization");
     }
 
     @Override
-    public void handleAfterAllMethodExecutionException(final ExtensionContext extensionContext, final Throwable throwable) throws Throwable {
+    public void handleAfterAllMethodExecutionException(final ExtensionContext extensionContext, final Throwable throwable)
+            throws Throwable {
         handleTestClassLevelLifecycleFailure(extensionContext, throwable, "Tear down");
     }
 
@@ -78,18 +84,21 @@ public class SerenityJUnitLifecycleAdapterExtension implements BeforeEachCallbac
         getEventBus().testStarted(name, extensionContext.getRequiredTestClass());
     }
 
-    private void startTestSuiteForFirstTest(ExtensionContext extensionContext) {
+    private void startTestSuiteForFirstTest(final ExtensionContext extensionContext) {
         if (!getEventBus().testSuiteHasStarted()) {
             getEventBus().testSuiteStarted(extensionContext.getRequiredTestClass());
         }
     }
 
-    private void handleTestClassLevelLifecycleFailure(final ExtensionContext extensionContext, final Throwable throwable, final String scenario) throws Throwable {
+    @SuppressWarnings("checkstyle:IllegalThrows")
+    private void handleTestClassLevelLifecycleFailure(
+            final ExtensionContext extensionContext,
+            final Throwable throwable,
+            final String scenario) throws Throwable {
         notifyTestStarted(extensionContext, scenario);
         testFailed(extensionContext, throwable);
         throw throwable;
     }
-
 
     private void notifyTestFinished() {
         getEventBus().testFinished();
@@ -97,5 +106,6 @@ public class SerenityJUnitLifecycleAdapterExtension implements BeforeEachCallbac
 
     private static class PendingException extends TestAbortedException {
 
+        private static final long serialVersionUID = 8251467304564002641L;
     }
 }

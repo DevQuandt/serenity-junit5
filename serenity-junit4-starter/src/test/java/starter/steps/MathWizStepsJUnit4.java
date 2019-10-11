@@ -11,17 +11,17 @@ public class MathWizStepsJUnit4 {
     int actor;
 
     @Step("#actor starts with {0}")
-    public void startsWith(int amount) {
+    public void startsWith(final int amount) {
         actor = amount;
     }
 
     @Step("#actor adds {0}")
-    public void adds(int amount) {
+    public void adds(final int amount) {
         actor = actor + amount;
     }
 
     @Step("#actor should have {0}")
-    public void shouldHave(int expectedTotal) {
+    public void shouldHave(final int expectedTotal) {
         then(actor).isEqualTo(expectedTotal);
     }
 
@@ -33,5 +33,6 @@ public class MathWizStepsJUnit4 {
     @Step
     @Pending
     public void pending() {
+        // pending
     }
 }

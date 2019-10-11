@@ -1,12 +1,13 @@
 package net.serenitybdd.junit5.extension;
 
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+
 import net.serenitybdd.junit5.extension.testsupport.TestClassExecutionHelper;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.model.TestOutcome;
 import net.thucydides.core.model.TestResult;
-import org.assertj.core.api.Assertions;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,7 +16,9 @@ class JUnit5Steps {
     private List<TestOutcome> testOutcomes;
 
     @Step
-    void executesTestClass(final Class<?> clazz, final TestClassExecutionHelper.EnvironmentConfigurationOverride... environmentConfigurationOverrides) {
+    void executesTestClass(
+            final Class<?> clazz,
+            final TestClassExecutionHelper.EnvironmentConfigurationOverride... environmentConfigurationOverrides) {
         testOutcomes = TestClassExecutionHelper.runTestClass(clazz, environmentConfigurationOverrides);
     }
 
@@ -54,7 +57,8 @@ class JUnit5Steps {
     @Step
     void stepNumberXShouldHaveResultY(final int stepNumber, final TestResult expectedResult) {
         assertThat(testOutcomes.get(0).getTestSteps().get((stepNumber - 1)).getResult())
-                .describedAs("Result of step number " + stepNumber).isEqualTo(expectedResult);
+                .describedAs("Result of step number " + stepNumber)
+                .isEqualTo(expectedResult);
     }
 
     @Step
@@ -63,17 +67,17 @@ class JUnit5Steps {
     }
 
     @Step
-    void shouldHaveNoStepResults(int index) {
+    void shouldHaveNoStepResults(final int index) {
         shouldHaveStepResults(index);
     }
 
     @Step
-    void shouldHaveStepResults(TestResult... expectedResults) {
+    void shouldHaveStepResults(final TestResult... expectedResults) {
         shouldHaveStepResults(0, expectedResults);
     }
 
     @Step
-    void shouldHaveStepResults(int index, TestResult... expectedResults) {
+    void shouldHaveStepResults(final int index, final TestResult... expectedResults) {
         assertThat(testOutcomes.get(index).getStepCount()).isEqualTo(expectedResults.length);
         for (int i = 0; i < expectedResults.length; i++) {
             stepNumberXShouldHaveResultY(i + 1, expectedResults[i]);

@@ -46,6 +46,7 @@ public class SerenityStepExtension implements BeforeEachCallback, InvocationInte
         return !getEventBus().aStepInTheCurrentTestHasFailed();
     }
 
+    @SuppressWarnings("checkstyle:IllegalThrows")
     private void throwStepFailures(final ExtensionContext extensionContext) throws Throwable {
         workaroundUntilStepInterceptorHandlesJunit5TestAbortedExceptionAnalogToJunit4AssumptionViolatedException(extensionContext);
         final BaseStepListener baseStepListener = baseStepListener();

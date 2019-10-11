@@ -1,23 +1,5 @@
 package net.serenitybdd.junit5.extension;
 
-import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.junit5.extension.testsupport.SerenityExtensionInnerTest;
-import net.serenitybdd.junit5.extension.testsupport.SerenityExtensionTest;
-import net.serenitybdd.junit5.extension.testsupport.TestClassExecutionHelper;
-import net.serenitybdd.junit5.extension.testsupport.Assertions;
-import net.thucydides.core.annotations.ClearCookiesPolicy;
-import net.thucydides.core.annotations.DefaultUrl;
-import net.thucydides.core.annotations.DriverOptions;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.ManagedPages;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.annotations.WhenPageOpens;
-import net.thucydides.core.annotations.WithDriver;
-import net.thucydides.core.model.TestResult;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.ScenarioSteps;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 import org.assertj.core.api.ObjectAssert;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,27 +14,33 @@ import org.testcontainers.containers.BrowserWebDriverContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static net.serenitybdd.junit5.extension.testsupport.Assertions.assertThat;
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.junit5.extension.testsupport.Assertions;
+import net.serenitybdd.junit5.extension.testsupport.SerenityExtensionInnerTest;
+import net.serenitybdd.junit5.extension.testsupport.SerenityExtensionTest;
+import net.serenitybdd.junit5.extension.testsupport.TestClassExecutionHelper;
+import net.thucydides.core.annotations.ClearCookiesPolicy;
+import net.thucydides.core.annotations.DefaultUrl;
+import net.thucydides.core.annotations.DriverOptions;
+import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.ManagedPages;
+import net.thucydides.core.annotations.Step;
+import net.thucydides.core.annotations.Steps;
+import net.thucydides.core.annotations.WhenPageOpens;
+import net.thucydides.core.annotations.WithDriver;
+import net.thucydides.core.model.TestResult;
+import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.ScenarioSteps;
+import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
 
 // TODO restructure tests by setup type (each with multiple verifications) (see comment below)
 /**
- * Inject
- * - I1) WebDriver into test @Managed WebDriver fields
- * - I2) WebDriver into Step
- * - I3) Page into test
- * - I4) Page factory into test
+ * Inject - I1) WebDriver into test @Managed WebDriver fields - I2) WebDriver into Step - I3) Page into test - I4) Page factory
+ * into test
  *
- * cases for tests with one @Managed WebDriver field:
- * - test class level config
- *      - T1: @Managed => default
- *      - T2: @Managed(driver = "xx")
- *      - T3: @Managed(driver = "xx", options = "yy")
- *      - T4: @Managed(options = "yy")
- * - test method level
- *      - T1: none
- *      - T2: @WithDriver
- *      - T3: @WithDriver + @DriverOptions
- *      - (note that just @DriverOptions is not possible)
+ * cases for tests with one @Managed WebDriver field: - test class level config - T1: @Managed => default - T2: @Managed(driver
+ * = "xx") - T3: @Managed(driver = "xx", options = "yy") - T4: @Managed(options = "yy") - test method level - T1: none -
+ * T2: @WithDriver - T3: @WithDriver + @DriverOptions - (note that just @DriverOptions is not possible)
  *
  * => 12 cases with three verifications with tests for I1 - I4.
  *
@@ -65,8 +53,11 @@ class WhenRunningWebPageTests {
     @Container
     public static BrowserWebDriverContainer seleniumContainer = (BrowserWebDriverContainer) new BrowserWebDriverContainer()
             .withCapabilities(new ChromeOptions())
-            .withSharedMemorySize(1000L * 1024 * 1024) // 1GB shared memory to avoid seleniumContainer crash, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
-            .withEnv("NODE_MAX_INSTANCES", "3").withEnv("NODE_MAX_SESSION", "3"); // more than one seleniumContainer needed for net.serenitybdd.junit.extension.WhenRunningWebPageTests.conditional_clearing_of_web_driver
+            .withSharedMemorySize(1000L * 1024 * 1024) // 1GB shared memory to avoid seleniumContainer crash, see
+                                                       // https://github.com/SeleniumHQ/docker-selenium#running-the-images
+            .withEnv("NODE_MAX_INSTANCES", "3")
+            .withEnv("NODE_MAX_SESSION", "3"); // more than one seleniumContainer needed for
+                                               // net.serenitybdd.junit.extension.WhenRunningWebPageTests.conditional_clearing_of_web_driver
 
     @Steps
     private JUnit5Steps junit5;
@@ -84,7 +75,9 @@ class WhenRunningWebPageTests {
 
     @Test
     void inject_default_web_driver_into_test() {
-        executeWithSuccessfulTests(InjectDefaultWebDriverIntoTestTest.class, 1); // TODO improve error message in case this fails ... => somehow print the output in case it is not successfull
+        executeWithSuccessfulTests(InjectDefaultWebDriverIntoTestTest.class, 1); // TODO improve error message in case this
+                                                                                 // fails ... => somehow print the output in
+                                                                                 // case it is not successfull
     }
 
     @Test
@@ -162,7 +155,10 @@ class WhenRunningWebPageTests {
         executeWithSuccessfulTests(ConditionalClearingOfWebDriverTest.class, 2, inDockerSeleniumHub());
     }
 
-    private void executeWithSuccessfulTests(final Class<?> clazz, final int expectedNumber, final TestClassExecutionHelper.EnvironmentConfigurationOverride... environmentConfigurationOverrides) {
+    private void executeWithSuccessfulTests(
+            final Class<?> clazz,
+            final int expectedNumber,
+            final TestClassExecutionHelper.EnvironmentConfigurationOverride... environmentConfigurationOverrides) {
         // when
         junit5.executesTestClass(clazz, environmentConfigurationOverrides);
 
@@ -175,10 +171,12 @@ class WhenRunningWebPageTests {
     private TestClassExecutionHelper.EnvironmentConfigurationOverride[] inDockerSeleniumHub() {
         System.out.println("VNC:" + seleniumContainer.getVncAddress());
         System.out.println("Selenium HUB:" + seleniumContainer.getSeleniumAddress());
-        return new TestClassExecutionHelper.EnvironmentConfigurationOverride[]{
+        return new TestClassExecutionHelper.EnvironmentConfigurationOverride[] {
                 new TestClassExecutionHelper.EnvironmentConfigurationOverride("webdriver.driver", "chrome"),
-                new TestClassExecutionHelper.EnvironmentConfigurationOverride("webdriver.remote.url", seleniumContainer.getSeleniumAddress().toString()),
-                new TestClassExecutionHelper.EnvironmentConfigurationOverride("webdriver.remote.driver", "chrome")};
+                new TestClassExecutionHelper.EnvironmentConfigurationOverride(
+                        "webdriver.remote.url",
+                        seleniumContainer.getSeleniumAddress().toString()),
+                new TestClassExecutionHelper.EnvironmentConfigurationOverride("webdriver.remote.driver", "chrome") };
     }
 
     @SerenityExtensionInnerTest
@@ -204,9 +202,7 @@ class WhenRunningWebPageTests {
 
         @Test
         void shouldSucceed() {
-            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver")
-                    .hasDriverName("chrome")
-                    .isSameAs(driver);
+            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver").hasDriverName("chrome").isSameAs(driver);
         }
     }
 
@@ -233,9 +229,7 @@ class WhenRunningWebPageTests {
 
         @Test
         void shouldSucceed() {
-            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver")
-                    .hasDriverName("firefox")
-                    .isSameAs(driver);
+            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver").hasDriverName("firefox").isSameAs(driver);
         }
     }
 
@@ -250,9 +244,7 @@ class WhenRunningWebPageTests {
 
         @Test
         void shouldSucceed() {
-            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver")
-                    .hasDriverName("firefox")
-                    .isSameAs(driver);
+            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver").hasDriverName("firefox").isSameAs(driver);
         }
     }
 
@@ -286,17 +278,13 @@ class WhenRunningWebPageTests {
 
         @Test
         void shouldInjectDefaultDriverIntoSteps() {
-            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver")
-                    .hasDriverName("chrome")
-                    .isSameAs(driver);
+            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver").hasDriverName("chrome").isSameAs(driver);
         }
 
         @Test
         @WithDriver("firefox")
         void shouldInjectMethodLevelDriverIntoSteps() {
-            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver")
-                    .hasDriverName("firefox")
-                    .isSameAs(driver);
+            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver").hasDriverName("firefox").isSameAs(driver);
         }
     }
 
@@ -327,30 +315,41 @@ class WhenRunningWebPageTests {
 
         @Test
         void shouldInjectDriveWithArbitraryDefaultType() {
-            // CAUTION: currently this could be type name could be firefox or chrome depending on which of the three @Manager field is considered the "first" field
-            // see also net.serenitybdd.junit.extension.page.SerenityPageExtension.explicitWebDriverConfiguration(org.junit.jupiter.api.extension.ExtensionContext)
-            Assertions.assertThat(driverWithDefaultTypeButNotNecessarilyTheDefaultDriverInstanceUsedForSteps).as("default driver")
-                    .hasSameDriverNameAs(ThucydidesWebDriverSupport.getDriver()) // ^1 NOT necessarily: isSameAs(ThucydidesWebDriverSupport.getDriver())
+            // CAUTION: currently this could be type name could be firefox or chrome depending on which of the three @Manager
+            // field is considered the "first" field
+            // see also
+            // net.serenitybdd.junit.extension.page.SerenityPageExtension.explicitWebDriverConfiguration(org.junit.jupiter.api.extension.ExtensionContext)
+            Assertions.assertThat(driverWithDefaultTypeButNotNecessarilyTheDefaultDriverInstanceUsedForSteps)
+                    .as("default driver")
+                    .hasSameDriverNameAs(ThucydidesWebDriverSupport.getDriver()) // ^1 NOT necessarily:
+                                                                                 // isSameAs(ThucydidesWebDriverSupport.getDriver())
                     .isNotIn(driverFirefox, driverChrome);
 
             /*
-             * ^1: One could assume that if no explicit type is given the default web driver is used => .
-             * This is only the case for the usual test setup with one @Managed WebDriver field. If there are multiple
+             * ^1: One could assume that if no explicit type is given the default web driver is used => . This is only the case
+             * for the usual test setup with one @Managed WebDriver field. If there are multiple
+             * 
              * @Managed WebDriver fields this is not necessarily the case.
              *
-             * net.thucydides.core.annotations.TestCaseAnnotations#injectDrivers only uses the defaultDriver if no name
-             * is given but this can never happen. So all three @Managed fields get a separate WebDriver instance.
-             * depending on the arbitrary reflection field order the "first" @Managed field defines the default web driver
-             * which is used for the steps.
+             * net.thucydides.core.annotations.TestCaseAnnotations#injectDrivers only uses the defaultDriver if no name is given
+             * but this can never happen. So all three @Managed fields get a separate WebDriver instance. depending on the
+             * arbitrary reflection field order the "first" @Managed field defines the default web driver which is used for the
+             * steps.
              */
         }
 
         @Test
         void shouldUseWebDriverWithDefaultTypeForSteps() {
-            Assertions.assertThat(wikipedia.getDriver()).as("step driver")
+            Assertions.assertThat(wikipedia.getDriver())
+                    .as("step driver")
                     .isSameAs(ThucydidesWebDriverSupport.getDriver())
                     .hasSameDriverNameAs(driverWithDefaultTypeButNotNecessarilyTheDefaultDriverInstanceUsedForSteps)
-                    .isIn(driverChrome, driverFirefox, driverWithDefaultTypeButNotNecessarilyTheDefaultDriverInstanceUsedForSteps); // ^1 (see above) NOT necessarily: isSameAs(driverWithDefaultTypeButNotNecessarilyTheDefaultDriverInstanceUsedForSteps)
+                    .isIn(
+                            driverChrome,
+                            driverFirefox,
+                            driverWithDefaultTypeButNotNecessarilyTheDefaultDriverInstanceUsedForSteps); // ^1 (see above) NOT
+                                                                                                         // necessarily:
+                                                                                                         // isSameAs(driverWithDefaultTypeButNotNecessarilyTheDefaultDriverInstanceUsedForSteps)
         }
     }
 
@@ -378,8 +377,7 @@ class WhenRunningWebPageTests {
         @Test
         @WithDriver("firefox")
         void shouldInjectMethodLevelDriverIntoSteps() {
-            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver")
-                    .hasDriverName("firefox");
+            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver").hasDriverName("firefox");
         }
 
         @Test
@@ -388,7 +386,6 @@ class WhenRunningWebPageTests {
             Assertions.assertThat(driverFirefox).as("@Managed(driver = \"firefox\")").hasDriverName("firefox");
             Assertions.assertThat(driverChrome).as("@Managed(driver = \"chrome\")").hasDriverName("chrome");
         }
-
 
     }
 
@@ -415,7 +412,8 @@ class WhenRunningWebPageTests {
 
         @Test
         void shouldSucceed() {
-            Assertions.assertThat(wikipedia.getDriver()).as("steps web driver")
+            Assertions.assertThat(wikipedia.getDriver())
+                    .as("steps web driver")
                     .hasDriverName("chrome")
                     .hasOptions("testOption")
                     .isSameAs(driver);
@@ -430,9 +428,7 @@ class WhenRunningWebPageTests {
 
         @Test
         void shouldSucceed() {
-            Assertions.assertThat(driver)
-                    .hasDriverName("firefox")
-                    .hasOptions("testOption");
+            Assertions.assertThat(driver).hasDriverName("firefox").hasOptions("testOption");
         }
     }
 
@@ -451,10 +447,10 @@ class WhenRunningWebPageTests {
         @WithDriver("firefox")
         @DriverOptions("methodDriverOptions")
         void shouldInjectMethodSpecificWebDriver() {
-            Assertions.assertThat(driver)
-                    .hasDriverName("firefox")
-                    .hasOptions(""); // CAUTION: this is not what one would expect BUT is consistent with Junit4
-            // could be considered a bug in TestCaseAnnotations#injectDrivers (driver name and options are not handled the same way although they belong together)
+            Assertions.assertThat(driver).hasDriverName("firefox").hasOptions(""); // CAUTION: this is not what one would expect
+                                                                                   // BUT is consistent with Junit4
+            // could be considered a bug in TestCaseAnnotations#injectDrivers (driver name and options are not handled the same
+            // way although they belong together)
         }
     }
 
@@ -468,8 +464,10 @@ class WhenRunningWebPageTests {
 
         @Test
         void shouldSucceed() {
-            org.assertj.core.api.Assertions.assertThat(page).as("page")
-                    .extracting(PageObject::getDriver).as("page driver")
+            org.assertj.core.api.Assertions.assertThat(page)
+                    .as("page")
+                    .extracting(PageObject::getDriver)
+                    .as("page driver")
                     .isSameAs(driver);
         }
     }
@@ -484,15 +482,16 @@ class WhenRunningWebPageTests {
 
         @Test
         void shouldSucceed() {
-            org.assertj.core.api.Assertions.assertThat(page).as("page")
-                    .extracting(PageObject::getDriver).as("page driver")
-                    .satisfies(webDriverOfPage ->
-                            Assertions.assertThat(webDriverOfPage)
+            org.assertj.core.api.Assertions.assertThat(page)
+                    .as("page")
+                    .extracting(PageObject::getDriver)
+                    .as("page driver")
+                    .satisfies(
+                            webDriverOfPage -> Assertions.assertThat(webDriverOfPage)
                                     .hasDriverName("firefox")
                                     .isSameAs(driver));
         }
     }
-
 
     @SerenityExtensionInnerTest
     static class InjectPageFactoryTest {
@@ -537,9 +536,9 @@ class WhenRunningWebPageTests {
         void step2() {
             assertThatExampleCookieIn(this.notClearingWebDriver).as("cookie for notClearingWebDriver")
                     .isNotNull()
-                    .extracting(Cookie::getValue).isEqualTo("cookieValue");
-            assertThatExampleCookieIn(clearingWebDriver).as("cookie for clearingWebDriver ")
-                    .isNull();
+                    .extracting(Cookie::getValue)
+                    .isEqualTo("cookieValue");
+            assertThatExampleCookieIn(clearingWebDriver).as("cookie for clearingWebDriver ").isNull();
         }
 
         @NotNull
@@ -578,6 +577,7 @@ class WhenRunningWebPageTests {
 
     static class SeleniumHubSteps extends ScenarioSteps {
 
+        private static final long serialVersionUID = -5061456486892809089L;
         SeleniumHubPage page;
 
         @Step

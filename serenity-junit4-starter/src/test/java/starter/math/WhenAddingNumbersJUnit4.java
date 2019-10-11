@@ -1,21 +1,23 @@
 package starter.math;
 
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.Title;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import starter.steps.MathWizSteps2JUnit4;
-import starter.steps.MathWizStepsJUnit4;
 
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.junit.Assume.assumeTrue;
 
+import starter.steps.MathWizSteps2JUnit4;
+import starter.steps.MathWizStepsJUnit4;
+
 @RunWith(SerenityRunner.class)
-@Narrative(text={"Maths is important."})
+@Narrative(text = { "Maths is important." })
 public class WhenAddingNumbersJUnit4 {
 
     @Steps
@@ -88,11 +90,11 @@ public class WhenAddingNumbersJUnit4 {
         jens.justFail();
         michael.shouldHave(5);
         then(this).withFailMessage("This does not work!!!!").isNull();
-        System.out.println("Hello.");
+//        System.out.println("Hello.");
     }
 
     @Test
-   public void abortedTest() {
+    public void abortedTest() {
         assumeTrue("abc".contains("Z"));
         // test ignored ...
     }
@@ -102,6 +104,5 @@ public class WhenAddingNumbersJUnit4 {
         michael.failingAssumption();
         michael.adds(2);
     }
-
 
 }

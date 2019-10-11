@@ -1,11 +1,12 @@
 package starter.webdriver;
 
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
+
 import net.serenitybdd.junit5.AbstractSerenityTestDetectionWorkaround;
 import net.serenitybdd.junit5.SerenityTest;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
 
 @SerenityTest
 class WebdriverTestScenario extends AbstractSerenityTestDetectionWorkaround {
@@ -15,7 +16,7 @@ class WebdriverTestScenario extends AbstractSerenityTestDetectionWorkaround {
 
     @Steps
     WebdriverTestSteps steps;
-        
+
     @Test
     void happy_day_scenario() {
         steps.stepThatOpensWikipedia();

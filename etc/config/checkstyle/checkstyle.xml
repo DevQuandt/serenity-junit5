@@ -235,10 +235,12 @@
     <module name="SuppressWarningsFilter"/>
 
     <!-- CUSTOM RULES -->
+   <!--
     <module name="RegexpSingleline">
         <property name="severity" value="warning"/>
         <property name="format" value="System\.out\.print(ln)?"/>
     </module>
+    -->
     <module name="RegexpSingleline">
         <property name="severity" value="warning"/>
         <property name="format" value="System\.err\.print(ln)?"/>
