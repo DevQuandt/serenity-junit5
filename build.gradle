@@ -8,7 +8,82 @@ buildscript {
     }
 }
 
+plugins {
+    id 'idea'
+    // id 'com.diffplug.gradle.spotless' version "$spotlessPluginVersion" apply false
+}
+
+
 wrapper {
     gradleVersion = '5.6.2'
     distributionType = Wrapper.DistributionType.ALL
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'pmd'
+    apply plugin: 'jacoco'
+    apply plugin: 'checkstyle'
+//    apply plugin: 'com.diffplug.gradle.spotless'
+
+    group = 'net.serenity-bdd'
+    version =  System.getenv('ARTEFACT_VERSION') ?: '0.0.1-SNAPSHOT'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+
+
+
+//    spotless {
+//        java {
+//            importOrderFile rootProject.file('etc/config/eclipse/eclipse.importorder')
+//            eclipse().configFile(rootProject.file('etc/config/eclipse/eclipse_formatter.xml'))
+//            target 'src/main/**/*.java', 'src/test/**/*.java' // ignore generated sources
+//            removeUnusedImports()
+//            endWithNewline()
+//        }
+//    }
+
+    jacoco {
+        toolVersion = '0.8.4'
+    }
+
+    jacocoTestReport {
+        mustRunAfter(test)
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html.destination file("${buildDir}/jacocoHtml")
+        }
+        doLast {
+            println "HTML Jacoco Coverage Rport: ${reports.html.destination}/index.html"
+        }
+    }
+
+    // to run coverage verification during the build (and fail when appropriate)
+    check.dependsOn jacocoTestCoverageVerification
+
+
+    pmd {
+        toolVersion = '6.17.0'
+        ruleSets = []
+        ruleSetFiles = files("${rootDir}/etc/config/pmd/ruleset.xml")
+    }
+
+    checkstyle {
+        // Checkstyle defines its own configDir so the global one is being overwritten
+        configFile = file("${rootDir}/etc/config/checkstyle/checkstyle.xml")
+        configProperties = ['suppressionFile': "${rootDir}/etc/config/checkstyle/suppressions.xml"]
+        ignoreFailures = false
+        maxWarnings = 0
+    }
+
+    tasks.withType(Checkstyle) {
+        reports {
+            xml.enabled false
+            html.enabled true
+            html.stylesheet resources.text.fromFile("${rootDir}/etc/config/checkstyle/checkstyle-simple.xsl")
+        }
+    }
+
+
 }

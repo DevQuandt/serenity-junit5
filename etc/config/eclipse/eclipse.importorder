@@ -1,0 +1,15 @@
+#Organize Import Order
+#Tue Sep 05 13:41:39 CEST 2017
+0=java
+1=javax
+2=ch
+3=com
+4=org
+5=org.springframework
+6=ru
+7=lombok
+8=freemarker
+9=net
+10=kn
+11=\#org
+12=\#
