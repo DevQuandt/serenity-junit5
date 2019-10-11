@@ -11,7 +11,7 @@ buildscript {
 plugins {
     id 'idea'
     // id 'com.diffplug.gradle.spotless' version "$spotlessPluginVersion" apply false
-    id 'com.github.spotbugs' version '2.0.0'
+    // id 'com.github.spotbugs' version '2.0.0'
 }
 
 
@@ -22,10 +22,10 @@ wrapper {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'pmd'
+//    apply plugin: 'pmd'
     apply plugin: 'jacoco'
     apply plugin: 'checkstyle'
-    apply plugin: 'com.github.spotbugs'
+//    apply plugin: 'com.github.spotbugs'
 //    apply plugin: 'com.diffplug.gradle.spotless'
 
     group = 'net.serenity-bdd'
@@ -33,19 +33,19 @@ subprojects {
 
     sourceCompatibility = JavaVersion.VERSION_1_8
 
-    spotbugs {
-        toolVersion = '3.1.12'
-        effort = 'default'
-        reportLevel = 'high'
-    }
+//    spotbugs {
+//        toolVersion = '3.1.12'
+//        effort = 'default'
+//        reportLevel = 'high'
+//    }
 
-    tasks.withType(com.github.spotbugs.SpotBugsTask) {
-        reports {
-            xml.enabled false
-            html.enabled true
-//            html.stylesheet resources.text.fromFile('findbugs/src/xsl/color.xsl')
-        }
-    }
+//    tasks.withType(com.github.spotbugs.SpotBugsTask) {
+//        reports {
+//            xml.enabled false
+//            html.enabled true
+////            html.stylesheet resources.text.fromFile('findbugs/src/xsl/color.xsl')
+//        }
+//    }
 
 //    spotless {
 //        java {
@@ -77,11 +77,11 @@ subprojects {
     check.dependsOn jacocoTestCoverageVerification
 
 
-    pmd {
-        toolVersion = '6.17.0'
-        ruleSets = []
-        ruleSetFiles = files("${rootDir}/etc/config/pmd/ruleset.xml")
-    }
+//    pmd {
+//        toolVersion = '6.17.0'
+//        ruleSets = []
+//        ruleSetFiles = files("${rootDir}/etc/config/pmd/ruleset.xml")
+//    }
 
     checkstyle {
         // Checkstyle defines its own configDir so the global one is being overwritten

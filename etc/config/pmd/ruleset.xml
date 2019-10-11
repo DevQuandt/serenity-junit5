@@ -7,22 +7,11 @@
 	<description>
 		PMD rule set to check code for errors and bad habits
 	</description>
-	
-	<!-- exclude generated sources -->
-	<exclude-pattern>.*Bo.*</exclude-pattern>
-	<exclude-pattern>.*Dto.*</exclude-pattern>
-	<!--
-		<exclude-pattern>.*/.*Dts\.java</exclude-pattern>
-	-->
 
 	<!-- exclude all test files -->
 	<exclude-pattern>.*Test.*</exclude-pattern>
 	<exclude-pattern>.*Mock.*</exclude-pattern>
-	<exclude-pattern>.*RestDocumentation.*</exclude-pattern>
-	
-	<!-- exclude test-data provider -->
-	<exclude-pattern>.*QuoteBuilder.*</exclude-pattern>
-	
+
 	<!-- 
 		THE MEANING OF THE PRIORITIES
 		
@@ -380,9 +369,11 @@
 	<rule ref="category/java/bestpractices.xml/UseCollectionIsEmpty">
 		<priority>3</priority>
 	</rule>
+<!--
 	<rule ref="category/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal">
 		<priority>1</priority>
 	</rule>
+-->
 	<rule ref="category/java/codestyle.xml/EmptyMethodInAbstractClassShouldBeAbstract">
 		<priority>1</priority>
 	</rule>

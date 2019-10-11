@@ -56,7 +56,7 @@ class JUnit5Steps {
 
     @Step
     void stepNumberXShouldHaveResultY(final int stepNumber, final TestResult expectedResult) {
-        assertThat(testOutcomes.get(0).getTestSteps().get((stepNumber - 1)).getResult())
+        assertThat(testOutcomes.get(0).getTestSteps().get(stepNumber - 1).getResult())
                 .describedAs("Result of step number " + stepNumber)
                 .isEqualTo(expectedResult);
     }
